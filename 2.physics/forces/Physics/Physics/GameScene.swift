@@ -1,47 +1,35 @@
 //
 //  GameScene.swift
-//  Basics
+//  Physics
 //
-//  Created by Nathan Zhen on 26/6/17.
-//  Copyright © 2017 Nathan Zhen. All rights reserved.
+//  Created by Todd Perkins on 11/9/16.
+//  Copyright © 2016 Todd Perkins. All rights reserved.
 //
 
 import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene {
-    
+    var guy:SKSpriteNode?
+    var platform:SKSpriteNode?
     
     override func didMove(to view: SKView) {
-        // Spaceship sprite (default)
-        let myShip:SKSpriteNode = self.childNode(withName: "ship") as! SKSpriteNode
-        
-        myShip.xScale = 0.25
-        myShip.yScale = 0.25
-        
-        // Custom sprite
-//        let player:SKSpriteNode = SKSpriteNode(imageNamed: "player_frame1")
-//        player.position = CGPoint(x: 100, y: 100)
-//        self.addChild(player)
-        
-        // Parent-Child
-        let player1:SKSpriteNode = self.childNode(withName: "player") as! SKSpriteNode
-        let drone:SKSpriteNode = player1.childNode(withName: "drone") as! SKSpriteNode
-        
-        drone.removeFromParent() // deletes the drone
-        //self.removeAllChildren() // deletes the parent
-        
-        myShip.addChild(drone)
-        drone.position = CGPoint(x: 0.45, y: 0.45)
+        guy = self.childNode(withName: "guy") as? SKSpriteNode
+        platform = self.childNode(withName: "platform") as? SKSpriteNode
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
-        
+        jump()
+    }
+    
+    func jump() {
+        guy?.texture = SKTexture(imageNamed: "guy_2")
+        guy?.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 200))
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-       
+        
     }
     
     func touchUp(atPoint pos : CGPoint) {
@@ -49,8 +37,6 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
@@ -69,5 +55,7 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        platform?.physicsBody?.applyForce(CGVector(dx: -20, dy: 0))
+        
     }
 }
